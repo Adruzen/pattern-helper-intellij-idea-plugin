@@ -23,4 +23,26 @@ public class IconLoadingTest extends BasePlatformTestCase {
         Icon icon = IconLoader.getIcon("/icons/Logo-side-panel.svg", IconLoadingTest.class);
         assertNotNull("Icon should be loaded", icon);
     }
+
+    /**
+     * Tests whether the 'Logo-side-panel_dark.svg' icon is loaded correctly.
+     * This method attempts to load the icon using IconLoader and asserts that the loaded icon is not null.
+     *
+     * @throws AssertionError If the icon cannot be loaded.
+     */
+    public void testDarkIconIsLoaded() {
+        Icon icon = IconLoader.getIcon("/icons/Logo-side-panel_dark.svg", IconLoadingTest.class);
+        assertNotNull("Icon should be loaded", icon);
+    }
+
+    /**
+     * Tests whether the 'Logo-side-panel_light.svg' icon is loaded correctly.
+     * This method attempts to load the icon using IconLoader and asserts that the loaded icon is not null.
+     *
+     * @throws AssertionError If the icon cannot be loaded.
+     */
+    public void testLightIconIsLoaded() {
+        Icon icon = IconLoader.getIcon("/icons/Logo-side-panel_light.svg", IconLoadingTest.class);
+        assertNotNull("Icon should be loaded", icon);
+    }
 }
