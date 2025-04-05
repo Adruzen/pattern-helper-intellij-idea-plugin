@@ -1,0 +1,22 @@
+<idea-plugin>
+    <id>eu.uma.pattern-helper-plugin</id>
+    <name>Pattern Helper Plugin</name>
+    <version>1.0</version>
+    <vendor email="your@email.com" url="https://example.com">Your Name</vendor>
+
+    <description><![CDATA[
+        A simple Hello World plugin for IntelliJ IDEA written in Java.
+    ]]></description>
+
+    <depends>com.intellij.modules.platform</depends>
+
+    <actions>
+        <action id="HelloWorldAction"
+                class="es.uma.patternhelper.HelloWorldAction"
+                text="Say Hello"
+                description="Shows a Hello World message">
+            <add-to-group group-id="ToolsMenu" anchor="last"/>
+        </action>
+    </actions>
+
+</idea-plugin>
