@@ -19,4 +19,12 @@
         </action>
     </actions>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <toolWindow id="Pattern Helper"
+                    icon="AllIcons.Toolwindows.ToolWindowMaven"
+                    anchor="right"
+                    canCloseContent="false"
+                    factoryClass="es.uma.patternhelper.gui.PatternToolWindowFactory"/>
+    </extensions>
+
 </idea-plugin>
