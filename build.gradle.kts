@@ -10,6 +10,16 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    testImplementation("junit:junit:4.13.2")
+}
+
+tasks {
+    test {
+        useJUnit()
+    }
+}
+
 intellij {
     version.set("2024.1")
     type.set("IC")
