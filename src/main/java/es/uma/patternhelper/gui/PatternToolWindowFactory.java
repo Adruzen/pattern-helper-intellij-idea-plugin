@@ -2,7 +2,7 @@
  * Factory class for creating the Pattern Helper tool window.
  * Implements ToolWindowFactory to integrate with IntelliJ's tool window system.
  *
- * @author Your Team Name
+ * @author akud
  */
 
 package es.uma.patternhelper.gui;

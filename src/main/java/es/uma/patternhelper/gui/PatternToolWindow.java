@@ -2,7 +2,7 @@
  * Main tool window class for the Pattern Helper plugin.
  * Manages the UI panel that displays pattern-related information in the IDE.
  *
- * @author Your Team Name
+ * @author akud
  */
 
 package es.uma.patternhelper.gui;
