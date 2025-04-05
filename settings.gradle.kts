@@ -1,1 +1,1 @@
-rootProject.name = "HelloWorldIntelliJPlugin"
+rootProject.name = "PatternHelperPlugin"
