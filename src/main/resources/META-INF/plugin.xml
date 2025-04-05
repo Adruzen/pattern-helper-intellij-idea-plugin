@@ -21,7 +21,7 @@
 
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="Pattern Helper"
-                    icon="AllIcons.Toolwindows.ToolWindowMaven"
+                    icon="/icons/Logo-side-panel.svg"
                     anchor="right"
                     canCloseContent="false"
                     factoryClass="es.uma.patternhelper.gui.PatternToolWindowFactory"/>
