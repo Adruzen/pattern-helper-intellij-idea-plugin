@@ -37,7 +37,6 @@ public class PatternToolWindowTest extends BasePlatformTestCase {
 
         // Basic assertions
         assertNotNull("Tool window should be registered", toolWindow);
-        String anchor = toolWindow.getAnchor().toString();
 
         // Check content
         Content[] contents = toolWindow.getContentManager().getContents();

@@ -6,8 +6,6 @@ import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
-import com.intellij.openapi.wm.ToolWindowAnchor;
-
 
 
 public class PatternToolWindowFactory  implements ToolWindowFactory {
