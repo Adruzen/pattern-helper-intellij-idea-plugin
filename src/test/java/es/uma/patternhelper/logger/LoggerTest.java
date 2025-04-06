@@ -36,7 +36,7 @@ public class LoggerTest {
      * Redirects System.out and System.err to capture log output.
      */
     @BeforeEach
-    public void setUpStreams() throws IOException {
+    public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
         logFile = tempDir.resolve("test.log");
