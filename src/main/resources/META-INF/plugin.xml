@@ -19,4 +19,11 @@
         </action>
     </actions>
 
+    <application-components>
+        <component>
+            <implementation-class>es.uma.patternhelper.PluginInitializer</implementation-class>
+        </component>
+    </application-components>
+
+
 </idea-plugin>
