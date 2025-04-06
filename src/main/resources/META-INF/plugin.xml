@@ -19,12 +19,11 @@
         </action>
     </actions>
 
-    <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="Pattern Helper"
-                    icon="/icons/Logo-side-panel.svg"
-                    anchor="right"
-                    canCloseContent="false"
-                    factoryClass="es.uma.patternhelper.gui.PatternToolWindowFactory"/>
-    </extensions>
+    <application-components>
+        <component>
+            <implementation-class>es.uma.patternhelper.PluginInitializer</implementation-class>
+        </component>
+    </application-components>
+
 
 </idea-plugin>

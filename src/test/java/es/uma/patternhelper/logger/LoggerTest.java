@@ -15,6 +15,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,8 +40,9 @@ public class LoggerTest {
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
+        Logger logger = Logger.getInstance(LoggerTest.class);
         logFile = tempDir.resolve("test.log");
-        Logger.getInstance(LoggerTest.class).setLogFile(logFile.toString());
+        logger.setLogFile(logFile.toString());
     }
 
     /**
@@ -117,6 +119,18 @@ public class LoggerTest {
     public void testLoggingWithClassContext() throws IOException {
         Logger logger = Logger.getInstance(LoggerTest.class);
         logger.info("Test message with class context");
+        String fileContent = Files.readString(logFile);
+        assertTrue(fileContent.contains(LoggerTest.class.getName()));
+    }
+
+    /**
+     * Tests logging with class context to a file.
+     * Verifies that the log message in the file contains the class name.
+     */
+    @Test
+    public void testLoggingWithClassContextToFile() throws IOException {
+        Logger logger = Logger.getInstance(LoggerTest.class);
+        logger.info("Test message with class context to file");
         String fileContent = Files.readString(logFile);
         assertTrue(fileContent.contains(LoggerTest.class.getName()));
     }
