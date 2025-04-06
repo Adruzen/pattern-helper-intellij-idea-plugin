@@ -45,4 +45,25 @@ public class IconLoadingTest extends BasePlatformTestCase {
         Icon icon = IconLoader.getIcon("/icons/Logo-side-panel_light.svg", IconLoadingTest.class);
         assertNotNull("Icon should be loaded", icon);
     }
+
+
+    /**
+     * Tests whether the 'icons-side-panel-XX.svg' icons are loaded correctly.
+     * This method attempts to load the icon using IconLoader and asserts that the loaded icon is not null.
+     *
+     * @throws AssertionError If the icon cannot be loaded.
+     */
+    public void testSidePanelIconsAreLoaded() {
+        int i = 1;
+        while (true) {
+            String iconPath = "/icons/icons-side-panel-" + String.format("%02d", i) + ".svg";
+            if (getClass().getResource(iconPath) != null) {
+                Icon icon = IconLoader.getIcon(iconPath, IconLoadingTest.class);
+                assertNotNull("Icon " + iconPath + " should be loaded", icon);
+                i++;
+            } else {
+                break;
+            }
+        }
+    }
 }
