@@ -31,7 +31,7 @@ public class PluginInitializerTest {
         initializer.initComponent();
 
         // Check if log file was created
-        assertTrue(Files.exists(Paths.get("pattern_helper.log")));
+        assertTrue(Files.exists(Paths.get("logfile.log")));
 
         // Check if the log message was printed
         String output = bos.toString();
@@ -39,6 +39,6 @@ public class PluginInitializerTest {
 
         // Clean up: Restore System.out and delete log file
         System.setOut(originalOut);
-        Files.delete(Paths.get("pattern_helper.log"));
+        Files.delete(Paths.get("logfile.log"));
     }
 }
