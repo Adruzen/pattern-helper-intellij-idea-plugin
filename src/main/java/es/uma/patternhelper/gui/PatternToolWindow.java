@@ -24,7 +24,10 @@ public class PatternToolWindow {
     public PatternToolWindow(Project project) {
         this.project = project;
         this.mainPanel = new JBPanel<>();
-        mainPanel.setLayout(new BorderLayout());  // You can set any layout you prefer
+        mainPanel.setLayout(new BorderLayout());
+
+        PatternToolWindowToolbar toolbar = new PatternToolWindowToolbar();
+        mainPanel.add(toolbar, BorderLayout.NORTH); // Add toolbar to the top
     }
 
     /**
