@@ -41,4 +41,6 @@ build/
 .Trashes
 ehthumbs.db
 Thumbs.db
-/private_docs/
+
+# OS generated files #
+private_docs/
