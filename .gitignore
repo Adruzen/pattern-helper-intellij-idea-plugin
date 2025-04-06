@@ -42,5 +42,8 @@ build/
 ehthumbs.db
 Thumbs.db
 
-# OS generated files #
+# Private docs #
 private_docs/
+
+# Local constants #
+local.properties

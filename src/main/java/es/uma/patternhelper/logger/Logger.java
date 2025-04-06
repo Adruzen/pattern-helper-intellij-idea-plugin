@@ -1,5 +1,8 @@
 package es.uma.patternhelper.logger;
 
+import es.uma.patternhelper.ConfigConstants;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -11,12 +14,19 @@ import java.time.format.DateTimeFormatter;
  */
 public class Logger {
     private static Logger instance;
-    private final String LOG_FILE_PATH = "logfile.log";
+    private final String LOG_FILE_PATH;
 
     /**
      * Private constructor to enforce singleton pattern.
      */
     private Logger() {
+        LOG_FILE_PATH = ConfigConstants.get("LOG_FILE_PATH");
+        if (LOG_FILE_PATH != null) {
+            File logFile = new File(LOG_FILE_PATH);
+            if (!logFile.getParentFile().exists()) {
+                logFile.getParentFile().mkdirs();
+            }
+        }
     }
 
     /**
@@ -29,6 +39,15 @@ public class Logger {
             instance = new Logger();
         }
         return instance;
+    }
+
+
+    /**
+     * Resets instance (for testing purposes).
+     *
+     */
+    static void resetInstance() {
+        instance = null;
     }
 
     /**
