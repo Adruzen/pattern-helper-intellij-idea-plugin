@@ -10,6 +10,17 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.1")
+}
+
+tasks {
+    test {
+        useJUnitPlatform() // Use JUnit Platform for JUnit 5
+    }
+}
+
 intellij {
     version.set("2024.1")
     type.set("IC")
