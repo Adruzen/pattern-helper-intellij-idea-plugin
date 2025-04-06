@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class Logger {
     private static Logger instance;
-    private String logFilePath;
+    private final String LOG_FILE_PATH = "logfile.log";
 
     /**
      * Private constructor to enforce singleton pattern.
@@ -32,13 +32,10 @@ public class Logger {
     }
 
     /**
-     * Sets the file path for logging.
+     * Returns file path String.
      *
-     * @param logFilePath The path to the log file.
      */
-    public void setLogFile(String logFilePath) {
-        this.logFilePath = logFilePath;
-    }
+    public String getFilePath() {return this.LOG_FILE_PATH;}
 
     /**
      * Logs an info message.
@@ -97,9 +94,7 @@ public class Logger {
     private void log(String level, String message, java.io.PrintStream stream, String className) {
         String formattedMessage = formatMessage(level, message, className);
         stream.println(formattedMessage);
-        if (logFilePath != null) {
-            writeToFile(formattedMessage);
-        }
+        writeToFile(formattedMessage);
     }
 
     /**
@@ -123,7 +118,7 @@ public class Logger {
      * @param message The message to write.
      */
     private void writeToFile(String message) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(logFilePath, true))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(LOG_FILE_PATH, true))) {
             writer.println(message);
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());

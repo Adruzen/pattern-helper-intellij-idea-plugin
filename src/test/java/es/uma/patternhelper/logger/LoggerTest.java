@@ -24,7 +24,7 @@ public class LoggerTest {
     @TempDir
     Path tempDir;
 
-    private Path logFile;
+    private final Path logFile = Path.of(Logger.getInstance().getFilePath());
 
     /**
      * Sets up the output streams and log file before each test.
@@ -35,8 +35,9 @@ public class LoggerTest {
     public void setUpStreams() throws IOException {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
-        logFile = tempDir.resolve("test.log");
-        Logger.getInstance().setLogFile(logFile.toString());
+        if (Files.exists(logFile)) {
+            Files.delete(logFile);
+        }
     }
 
     /**
