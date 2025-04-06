@@ -121,6 +121,18 @@ public class LoggerTest {
     }
 
     /**
+     * Tests logging with class context to a file.
+     * Verifies that the log message in the file contains the class name.
+     */
+    @Test
+    public void testLoggingWithClassContextToFile() throws IOException {
+        Logger logger = Logger.getInstance(LoggerTest.class);
+        logger.info("Test message with class context to file");
+        String fileContent = Files.readString(logFile);
+        assertTrue(fileContent.contains(LoggerTest.class.getName()));
+    }
+
+    /**
      * Tests logging an exception.
      * Verifies that the exception message is logged to System.err.
      */
