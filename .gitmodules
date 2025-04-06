@@ -1,0 +1,3 @@
+[submodule "private_docs"]
+	path = private_docs
+	url = https://github.com/Adruzen/-pattern-helper-intellij-idea-plugin-private-docs.git
