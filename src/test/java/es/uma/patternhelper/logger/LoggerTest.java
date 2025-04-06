@@ -15,6 +15,7 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,8 +40,9 @@ public class LoggerTest {
     public void setUpStreams() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
+        Logger logger = Logger.getInstance(LoggerTest.class);
         logFile = tempDir.resolve("test.log");
-        Logger.getInstance(LoggerTest.class).setLogFile(logFile.toString());
+        logger.setLogFile(logFile.toString());
     }
 
     /**

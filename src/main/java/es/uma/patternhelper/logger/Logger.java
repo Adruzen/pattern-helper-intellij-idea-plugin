@@ -51,6 +51,13 @@ public class Logger {
     }
 
     /**
+     * Gets the file path for logging.
+     */
+    public String getLogFile() {
+        return logFilePath;
+    }
+
+    /**
      * Logs an informational message.
      *
      * @param message The message to log.
