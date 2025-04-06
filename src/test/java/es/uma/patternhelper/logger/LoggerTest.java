@@ -114,10 +114,11 @@ public class LoggerTest {
      * Verifies that the log message contains the class name.
      */
     @Test
-    public void testLoggingWithClassContext() {
+    public void testLoggingWithClassContext() throws IOException {
         Logger logger = Logger.getInstance(LoggerTest.class);
         logger.info("Test message with class context");
-        assertTrue(outContent.toString().contains(LoggerTest.class.getName()));
+        String fileContent = Files.readString(logFile);
+        assertTrue(fileContent.contains(LoggerTest.class.getName()));
     }
 
     /**
