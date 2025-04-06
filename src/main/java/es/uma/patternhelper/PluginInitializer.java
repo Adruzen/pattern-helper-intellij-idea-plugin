@@ -17,8 +17,7 @@ public class PluginInitializer implements ApplicationComponent {
      */
     @Override
     public void initComponent() {
-        Logger logger = Logger.getInstance(PluginInitializer.class);
-        logger.setLogFile("pattern_helper.log");
+        Logger logger = Logger.getInstance();
         logger.info("Pattern Helper Plugin initialized.");
     }
 }
