@@ -7,22 +7,15 @@ import es.uma.patternhelper.logger.Logger;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.io.IOException;
 
 @Service(Service.Level.APP)
 public final class PluginInitializer implements StartupActivity {
 
     private static boolean isInitialized = false;
-    private static final String DEFAULT_LOCAL_PROPERTIES = "local.properties";
-    private static final String DEFAULT_SHARED_PROPERTIES = "shared.properties";
 
-    public PluginInitializer() {
+    public PluginInitializer() throws IOException {
         if (!isInitialized) {
-            // Initialize with default properties files
-            File localProperties = new File(DEFAULT_LOCAL_PROPERTIES);
-            File sharedProperties = new File(DEFAULT_SHARED_PROPERTIES);
-
-            // First initialize ConfigConstants
-            ConfigConstants.initialize(localProperties, sharedProperties);
             isInitialized = true;
 
             // Then get Logger instance
@@ -31,9 +24,8 @@ public final class PluginInitializer implements StartupActivity {
         }
     }
 
-    public static void initialize(File localProperties, File sharedProperties) {
+    public static void initialize(File localProperties, File sharedProperties) throws IOException {
         if (!isInitialized) {
-            ConfigConstants.initialize(localProperties, sharedProperties);
             isInitialized = true;
             Logger.getInstance().info("Pattern Helper Plugin initialized with custom properties.");
         }
@@ -47,11 +39,12 @@ public final class PluginInitializer implements StartupActivity {
     @Override
     public void runActivity(@NotNull Project project) {
         if (!isInitialized) {
-            File localProperties = new File(DEFAULT_LOCAL_PROPERTIES);
-            File sharedProperties = new File(DEFAULT_SHARED_PROPERTIES);
-            ConfigConstants.initialize(localProperties, sharedProperties);
             isInitialized = true;
         }
-        Logger.getInstance().info("Plugin initialized for project: " + project.getName());
+        try {
+            Logger.getInstance().info("Plugin initialized for project: " + project.getName());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
