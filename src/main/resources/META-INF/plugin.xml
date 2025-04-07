@@ -13,7 +13,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <postStartupActivity implementation="es.uma.patternhelper.PluginInitializer"/>
         <toolWindow id="Pattern Helper"
-                    factory="es.uma.patternhelper.gui.PatternToolWindowFactory"
+                    factoryClass="es.uma.patternhelper.gui.PatternToolWindowFactory"
                     anchor="right"
                     icon="/icons/Logo-side-panel.svg"/>
     </extensions>
