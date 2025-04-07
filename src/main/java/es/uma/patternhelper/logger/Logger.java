@@ -14,20 +14,30 @@ import java.time.format.DateTimeFormatter;
  */
 public class Logger {
     private static Logger instance;
-    private final String LOG_FILE_PATH;
+    private String LOG_FILE_PATH;
 
     /**
      * Private constructor to enforce singleton pattern.
      */
+
     private Logger() {
-        LOG_FILE_PATH = ConfigConstants.get("LOG_FILE_PATH");
-        if (LOG_FILE_PATH != null) {
-            File logFile = new File(LOG_FILE_PATH);
-            if (!logFile.getParentFile().exists()) {
-                logFile.getParentFile().mkdirs();
+        if (ConfigConstants.isInicialised()) {
+            LOG_FILE_PATH = ConfigConstants.get("LOG_FILE_PATH");
+            if (LOG_FILE_PATH != null) {
+                File logFile = new File(LOG_FILE_PATH);
+                if (!logFile.getParentFile().exists()) {
+                    logFile.getParentFile().mkdirs();
+                }
             }
+        } else {
+            // Fallback if location cannot be determined
+            LOG_FILE_PATH = "logfile.log";
         }
+
+        System.out.println("Log file will be created at: " + LOG_FILE_PATH);
     }
+
+
 
     /**
      * Returns the singleton instance of the Logger.
@@ -41,12 +51,11 @@ public class Logger {
         return instance;
     }
 
-
     /**
      * Resets instance (for testing purposes).
      *
      */
-    static void resetInstance() {
+    public static void resetInstance() {
         instance = null;
     }
 
@@ -137,12 +146,19 @@ public class Logger {
      * @param message The message to write.
      */
     private void writeToFile(String message) {
+        File logFile = new File(LOG_FILE_PATH);
+        System.out.println("Absolute path: " + logFile.getAbsolutePath());
         try (PrintWriter writer = new PrintWriter(new FileWriter(LOG_FILE_PATH, true))) {
             writer.println(message);
+            writer.flush();
+            System.out.println("File exists: " + logFile.exists());
+            System.out.println("File length: " + logFile.length());
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());
+            e.printStackTrace();
         }
     }
+
 
     /**
      * Gets the name of the class that called the logging method.
