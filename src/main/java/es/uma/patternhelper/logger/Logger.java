@@ -1,11 +1,9 @@
 package es.uma.patternhelper.logger;
 
+import com.intellij.openapi.application.PathManager;
 import es.uma.patternhelper.ConfigConstants;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,27 +12,22 @@ import java.time.format.DateTimeFormatter;
  */
 public class Logger {
     private static Logger instance;
-    private String LOG_FILE_PATH;
+    private static File logFile;
+    private final BufferedWriter bufferedWriter;
 
     /**
      * Private constructor to enforce singleton pattern.
      */
 
     private Logger() {
-        if (ConfigConstants.isInicialised()) {
-            LOG_FILE_PATH = ConfigConstants.get("LOG_FILE_PATH");
-            if (LOG_FILE_PATH != null) {
-                File logFile = new File(LOG_FILE_PATH);
-                if (!logFile.getParentFile().exists()) {
-                    logFile.getParentFile().mkdirs();
-                }
-            }
-        } else {
-            // Fallback if location cannot be determined
-            LOG_FILE_PATH = "logfile.log";
+        String logDir = PathManager.getLogPath();
+        logFile = new File(logDir, "logfile.log");
+        try {
+            bufferedWriter = new BufferedWriter(new FileWriter(logFile));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-
-        System.out.println("Log file will be created at: " + LOG_FILE_PATH);
+        System.out.println("Starting logging to file: " + logFile.getAbsolutePath());
     }
 
 
@@ -44,7 +37,7 @@ public class Logger {
      *
      * @return The Logger instance.
      */
-    public static Logger getInstance() {
+    public static Logger getInstance() throws IOException {
         if (instance == null) {
             instance = new Logger();
         }
@@ -55,15 +48,19 @@ public class Logger {
      * Resets instance (for testing purposes).
      *
      */
-    public static void resetInstance() {
+    public static void resetInstance() throws IOException {
+        if (instance != null) {
+            instance.bufferedWriter.close();
+        }
         instance = null;
     }
+
 
     /**
      * Returns file path String.
      *
      */
-    public String getFilePath() {return this.LOG_FILE_PATH;}
+    public String getFilePath() {return logFile.getAbsolutePath();}
 
     /**
      * Logs an info message.
@@ -146,13 +143,10 @@ public class Logger {
      * @param message The message to write.
      */
     private void writeToFile(String message) {
-        File logFile = new File(LOG_FILE_PATH);
-        System.out.println("Absolute path: " + logFile.getAbsolutePath());
-        try (PrintWriter writer = new PrintWriter(new FileWriter(LOG_FILE_PATH, true))) {
-            writer.println(message);
-            writer.flush();
-            System.out.println("File exists: " + logFile.exists());
-            System.out.println("File length: " + logFile.length());
+        try {
+            bufferedWriter.write(message);
+            bufferedWriter.newLine();
+            bufferedWriter.flush();
         } catch (IOException e) {
             System.err.println("Error writing to log file: " + e.getMessage());
             e.printStackTrace();
