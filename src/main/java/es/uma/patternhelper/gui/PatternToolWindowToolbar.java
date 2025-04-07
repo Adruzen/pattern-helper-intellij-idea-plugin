@@ -3,6 +3,7 @@ package es.uma.patternhelper.gui;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.util.ui.JBUI;
+import es.uma.patternhelper.logger.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PatternToolWindowToolbar extends JBPanel<PatternToolWindowToolbar> {
     private final List<JButton> buttons = new ArrayList<>();
@@ -20,8 +22,7 @@ public class PatternToolWindowToolbar extends JBPanel<PatternToolWindowToolbar> 
      */
     public PatternToolWindowToolbar() {
         setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-        setBorder(JBUI.Borders.empty(2, 5)); // Add some padding
-        createButtons();
+        setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK), JBUI.Borders.empty(2, 5)));        createButtons();
     }
 
     /**
@@ -51,8 +52,9 @@ public class PatternToolWindowToolbar extends JBPanel<PatternToolWindowToolbar> 
      */
     private Icon loadIcon(String iconPath) {
         try {
-            return new ImageIcon(getClass().getResource(iconPath));
+            return new ImageIcon(Objects.requireNonNull(getClass().getResource(iconPath)));
         } catch (Exception e) {
+            Logger.getInstance().error("Error loading icon: " + iconPath);
             System.err.println("Error loading icon: " + iconPath);
             e.printStackTrace();
             return null;
@@ -69,11 +71,11 @@ public class PatternToolWindowToolbar extends JBPanel<PatternToolWindowToolbar> 
     private JButton createIconButton(Icon icon, String tooltip) {
         JButton button = new JButton(icon);
         button.setToolTipText(tooltip);
-        button.setBorderPainted(false);
+        button.setBorderPainted(true);
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         button.setPreferredSize(new Dimension(16, 16));
-        button.setMaximumSize(new Dimension(16, 16));
+        // button.setMaximumSize(new Dimension(16, 16));
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
