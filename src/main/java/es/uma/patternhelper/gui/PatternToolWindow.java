@@ -38,4 +38,13 @@ public class PatternToolWindow {
     public JBPanel<?> getContent() {
         return mainPanel;
     }
+
+    /**
+     * Returns the project context associated with this tool window.
+     *
+     * @return Project The project context
+     */
+    public Project getProject() {
+        return project;
+    }
 }
