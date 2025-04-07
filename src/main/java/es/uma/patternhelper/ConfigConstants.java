@@ -62,4 +62,8 @@ public final class ConfigConstants {
 
         return value;
     }
+
+    public static boolean isInicialised() {
+        return isInitialized;
+    }
 }
