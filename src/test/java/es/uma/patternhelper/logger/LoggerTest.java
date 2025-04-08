@@ -1,3 +1,9 @@
+/**
+ * Test suite for Logger functionality.
+ *
+ * author: akud
+ */
+
 package es.uma.patternhelper.logger;
 
 import org.junit.jupiter.api.AfterEach;
@@ -10,9 +16,6 @@ import java.nio.file.Files;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Test suite for Logger functionality.
- */
 class LoggerTest {
     private File logFile;
 
@@ -25,7 +28,6 @@ class LoggerTest {
     @BeforeEach
     void setUp() throws IOException {
         Logger.resetInstance();
-        Logger.getInstance(); // Initialize logger to get default log file
         logFile = new File(Logger.getInstance().getFilePath());
     }
 
@@ -37,7 +39,7 @@ class LoggerTest {
      */
     @AfterEach
     void tearDown() throws IOException {
-        assertTrue(logFile.exists());
+        Logger.deleteLogFile();
         Logger.resetInstance();
     }
 

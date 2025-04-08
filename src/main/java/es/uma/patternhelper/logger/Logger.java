@@ -13,23 +13,31 @@ import java.time.format.DateTimeFormatter;
 public class Logger {
     private static Logger instance;
     private static File logFile;
-    private final BufferedWriter bufferedWriter;
+    private static BufferedWriter bufferedWriter = null;
 
     /**
-     * Private constructor to enforce singleton pattern.
+     * Private constructor to initialize the Logger.
+     * Creates the log directory if it doesn't exist and sets up the log file.
+     *
+     * @throws IOException        If an I/O error occurs during file creation.
+     * @throws SecurityException If a security manager exists and its `checkWrite` method denies write access to the log directory or file.
      */
-
-    private Logger() {
+    private Logger() throws IOException {
         String logDir = PathManager.getLogPath();
-        logFile = new File(logDir, "logfile.log");
-        try {
-            bufferedWriter = new BufferedWriter(new FileWriter(logFile));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        // ensure that  the log directory exists
+        if (!new File(logDir).exists()) {
+            if (new File(logDir).mkdirs()) {
+                System.out.println("Created log directory: " + logDir);
+            } else {
+                throw new IOException("Failed to create log directory: " + logDir);
+            }
         }
+        logFile = new File(logDir, "logfile.log");
         System.out.println("Starting logging to file: " + logFile.getAbsolutePath());
+        if (bufferedWriter == null) {
+            bufferedWriter = new BufferedWriter(new FileWriter(logFile));
+        }
     }
-
 
 
     /**
@@ -44,16 +52,40 @@ public class Logger {
         return instance;
     }
 
+
     /**
-     * Resets instance (for testing purposes).
+     * Resets the singleton Logger instance, primarily for testing purposes.
+     * Closes the current log file's writer if an instance exists and sets the
+     * internal instance reference to null, allowing a fresh instance creation
+     * on the next {@code getInstance()} call.
      *
+     * @throws IOException If an error occurs closing the writer.
      */
     public static void resetInstance() throws IOException {
         if (instance != null) {
-            instance.bufferedWriter.close();
+            if (bufferedWriter != null) {
+                bufferedWriter = null;
+            }
+            instance = null;
         }
-        instance = null;
     }
+
+    /**
+     * Deletes the log file.
+     */
+    public static void deleteLogFile() {
+        if (bufferedWriter != null) {
+            try {
+                bufferedWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (logFile.exists()) {
+            logFile.delete();
+        }
+    }
+
 
 
     /**
@@ -116,7 +148,7 @@ public class Logger {
      * @param stream    The output stream (e.g., System.out, System.err).
      * @param className The name of the calling class.
      */
-    private void log(String level, String message, java.io.PrintStream stream, String className) {
+    private void log(String level, String message, PrintStream stream, String className) {
         String formattedMessage = formatMessage(level, message, className);
         stream.println(formattedMessage);
         writeToFile(formattedMessage);
