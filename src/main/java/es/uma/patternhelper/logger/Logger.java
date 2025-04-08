@@ -16,25 +16,22 @@ public class Logger {
     private static BufferedWriter bufferedWriter = null;
 
     /**
-     * Private constructor to enforce singleton pattern.
+     * Private constructor to initialize the Logger.
+     * Creates the log directory if it doesn't exist and sets up the log file.
+     *
+     * @throws IOException        If an I/O error occurs during file creation.
+     * @throws SecurityException If a security manager exists and its `checkWrite` method denies write access to the log directory or file.
      */
-
-    private Logger() {
+    private Logger() throws IOException, SecurityException {
         String logDir = PathManager.getLogPath();
         // ensure that  the log directory exists
         if (!new File(logDir).exists()) {
-            if (!new File(logDir).mkdirs()) {
-                throw new RuntimeException("Could not create log directory: " + logDir);
-            }
+            new File(logDir).mkdirs();
         }
         logFile = new File(logDir, "logfile.log");
         System.out.println("Starting logging to file: " + logFile.getAbsolutePath());
         if (bufferedWriter != null) {
-            try {
-                bufferedWriter = new BufferedWriter(new FileWriter(logFile));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+            bufferedWriter = new BufferedWriter(new FileWriter(logFile));
         }
     }
 
@@ -68,8 +65,12 @@ public class Logger {
     }
 
     /**
-     * Resets instance (for testing purposes).
+     * Resets the singleton Logger instance, primarily for testing purposes.
+     * Closes the current log file's writer if an instance exists and sets the
+     * internal instance reference to null, allowing a fresh instance creation
+     * on the next {@code getInstance()} call.
      *
+     * @throws IOException If an error occurs closing the writer.
      */
     public static void resetInstance() throws IOException {
         if (instance != null) {
@@ -166,14 +167,6 @@ public class Logger {
      * @param message The message to write.
      */
     private void writeToFile(String message) {
-        if (bufferedWriter == null){
-            try {
-                bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
-            } catch (IOException e) {
-                System.err.println("Error opening log file: " + e.getMessage());
-                e.printStackTrace();
-            }
-        }
         try {
             bufferedWriter.write(message);
             bufferedWriter.newLine();
