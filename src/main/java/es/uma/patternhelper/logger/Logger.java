@@ -22,15 +22,19 @@ public class Logger {
      * @throws IOException        If an I/O error occurs during file creation.
      * @throws SecurityException If a security manager exists and its `checkWrite` method denies write access to the log directory or file.
      */
-    private Logger() throws IOException, SecurityException {
+    private Logger() throws IOException {
         String logDir = PathManager.getLogPath();
         // ensure that  the log directory exists
         if (!new File(logDir).exists()) {
-            new File(logDir).mkdirs();
+            if (new File(logDir).mkdirs()) {
+                System.out.println("Created log directory: " + logDir);
+            } else {
+                throw new IOException("Failed to create log directory: " + logDir);
+            }
         }
         logFile = new File(logDir, "logfile.log");
         System.out.println("Starting logging to file: " + logFile.getAbsolutePath());
-        if (bufferedWriter != null) {
+        if (bufferedWriter == null) {
             bufferedWriter = new BufferedWriter(new FileWriter(logFile));
         }
     }
@@ -46,6 +50,24 @@ public class Logger {
             instance = new Logger();
         }
         return instance;
+    }
+
+
+    /**
+     * Resets the singleton Logger instance, primarily for testing purposes.
+     * Closes the current log file's writer if an instance exists and sets the
+     * internal instance reference to null, allowing a fresh instance creation
+     * on the next {@code getInstance()} call.
+     *
+     * @throws IOException If an error occurs closing the writer.
+     */
+    public static void resetInstance() throws IOException {
+        if (instance != null) {
+            if (bufferedWriter != null) {
+                bufferedWriter = null;
+            }
+            instance = null;
+        }
     }
 
     /**
@@ -64,20 +86,6 @@ public class Logger {
         }
     }
 
-    /**
-     * Resets the singleton Logger instance, primarily for testing purposes.
-     * Closes the current log file's writer if an instance exists and sets the
-     * internal instance reference to null, allowing a fresh instance creation
-     * on the next {@code getInstance()} call.
-     *
-     * @throws IOException If an error occurs closing the writer.
-     */
-    public static void resetInstance() throws IOException {
-        if (instance != null) {
-            bufferedWriter.close();
-        }
-        instance = null;
-    }
 
 
     /**
