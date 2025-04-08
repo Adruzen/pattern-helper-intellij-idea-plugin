@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 public class Logger {
     private static Logger instance;
     private static File logFile;
-    private final BufferedWriter bufferedWriter;
+    private static BufferedWriter bufferedWriter = null;
 
     /**
      * Private constructor to enforce singleton pattern.
@@ -21,15 +21,22 @@ public class Logger {
 
     private Logger() {
         String logDir = PathManager.getLogPath();
-        logFile = new File(logDir, "logfile.log");
-        try {
-            bufferedWriter = new BufferedWriter(new FileWriter(logFile));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        // ensure that  the log directory exists
+        if (!new File(logDir).exists()) {
+            if (!new File(logDir).mkdirs()) {
+                throw new RuntimeException("Could not create log directory: " + logDir);
+            }
         }
+        logFile = new File(logDir, "logfile.log");
         System.out.println("Starting logging to file: " + logFile.getAbsolutePath());
+        if (bufferedWriter != null) {
+            try {
+                bufferedWriter = new BufferedWriter(new FileWriter(logFile));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
-
 
 
     /**
@@ -45,12 +52,28 @@ public class Logger {
     }
 
     /**
+     * Deletes the log file.
+     */
+    public static void deleteLogFile() {
+        if (bufferedWriter != null) {
+            try {
+                bufferedWriter.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        if (logFile.exists()) {
+            logFile.delete();
+        }
+    }
+
+    /**
      * Resets instance (for testing purposes).
      *
      */
     public static void resetInstance() throws IOException {
         if (instance != null) {
-            instance.bufferedWriter.close();
+            bufferedWriter.close();
         }
         instance = null;
     }
@@ -116,7 +139,7 @@ public class Logger {
      * @param stream    The output stream (e.g., System.out, System.err).
      * @param className The name of the calling class.
      */
-    private void log(String level, String message, java.io.PrintStream stream, String className) {
+    private void log(String level, String message, PrintStream stream, String className) {
         String formattedMessage = formatMessage(level, message, className);
         stream.println(formattedMessage);
         writeToFile(formattedMessage);
@@ -143,6 +166,14 @@ public class Logger {
      * @param message The message to write.
      */
     private void writeToFile(String message) {
+        if (bufferedWriter == null){
+            try {
+                bufferedWriter = new BufferedWriter(new FileWriter(logFile, true));
+            } catch (IOException e) {
+                System.err.println("Error opening log file: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
         try {
             bufferedWriter.write(message);
             bufferedWriter.newLine();
